@@ -2,6 +2,9 @@ import clsx from 'clsx'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
+import type { AppName } from '../../../config/apps.js'
+import { extractDomain } from '../../../shared/utils/extract-domain.js'
+import { savedDomainAssociation } from '../../prefs/state/actions.js'
 import { Spinner } from '../../shared/components/atoms/spinner.js'
 import {
   useDeepEqualSelector,
@@ -14,6 +17,7 @@ import { clickedApp, startedPicker } from '../state/actions.js'
 import AppLogo from './atoms/app-logo.js'
 import Kbd from './atoms/kbd.js'
 import { useKeyboardEvents } from './hooks/use-keyboard-events.js'
+import SaveDomainToggle from './organisms/save-domain-toggle.js'
 import SupportMessage from './organisms/support-message.js'
 import UpdateBar from './organisms/update-bar.js'
 import UrlBar from './organisms/url-bar.js'
@@ -41,8 +45,18 @@ const App: React.FC = () => {
   const apps = useInstalledApps()
   const url = useSelector((state) => state.data.url)
   const icons = useDeepEqualSelector((state) => state.data.icons)
+  const saveDomainForUrl = useSelector((state) => state.data.saveDomainForUrl)
 
   const keyCodeMap = useKeyCodeMap()
+
+  const handleAppPicked = (appName: AppName) => {
+    if (saveDomainForUrl) {
+      const domain = extractDomain(url)
+      if (domain) {
+        dispatch(savedDomainAssociation({ appName, domain }))
+      }
+    }
+  }
 
   // const totalApps = apps.length
 
@@ -83,7 +97,8 @@ const App: React.FC = () => {
                   'hover:bg-black/10 hover:dark:bg-blue-50/10',
                   'rounded-xl',
                 )}
-                onClick={(event) =>
+                onClick={(event) => {
+                  handleAppPicked(app.name)
                   dispatch(
                     clickedApp({
                       appName: app.name,
@@ -91,7 +106,7 @@ const App: React.FC = () => {
                       isShift: event.shiftKey,
                     }),
                   )
-                }
+                }}
                 onKeyDown={(event) => {
                   if (event.code === 'ArrowDown') {
                     event.preventDefault()
@@ -121,6 +136,8 @@ const App: React.FC = () => {
           )
         })}
       </div>
+
+      <SaveDomainToggle />
 
       <UrlBar />
 

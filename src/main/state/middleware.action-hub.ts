@@ -19,10 +19,12 @@ import {
   clickedUpdateButton,
   clickedUpdateRestartButton,
   confirmedReset,
+  savedDomainAssociation,
   startedPrefs,
 } from '../../renderers/prefs/state/actions.js'
 import type { Middleware } from '../../shared/state/model.js'
 import type { RootState } from '../../shared/state/reducer.root.js'
+import { extractDomain } from '../../shared/utils/extract-domain.js'
 import { database } from '../database.js'
 import { createTray } from '../tray.js'
 import copyUrlToClipboard from '../utils/copy-url-to-clipboard.js'
@@ -162,6 +164,14 @@ export const actionHubMiddleware =
         )
 
         if (!action.payload.metaKey && foundApp) {
+          if (nextState.data.saveDomainForUrl) {
+            const domain = extractDomain(nextState.data.url)
+            if (domain) {
+              dispatch(
+                savedDomainAssociation({ appName: foundApp.name, domain }),
+              )
+            }
+          }
           openApp(
             foundApp.name,
             nextState.data.url,
@@ -175,7 +185,23 @@ export const actionHubMiddleware =
 
     // Open URL
     else if (openedUrl.match(action)) {
-      showPickerWindow()
+      const url = action.payload
+      const domain = extractDomain(url)
+      const associatedAppName = domain
+        ? nextState.storage.domainAssociations[domain]
+        : undefined
+      const associatedApp = associatedAppName
+        ? nextState.storage.apps.find(
+            (storedApp) =>
+              storedApp.name === associatedAppName && storedApp.isInstalled,
+          )
+        : undefined
+
+      if (associatedApp) {
+        openApp(associatedApp.name, url, false, false)
+      } else {
+        showPickerWindow()
+      }
     }
 
     // Tray: restore picker

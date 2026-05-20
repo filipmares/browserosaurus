@@ -79,6 +79,8 @@ test('kitchen sink', async () => {
         height: 200,
         isSetup: true,
         supportMessage: -1,
+
+        domainAssociations: {},
       },
     }),
   )
@@ -140,6 +142,8 @@ test('should show spinner when no installed apps are found', async () => {
         height: 200,
         isSetup: true,
         supportMessage: -1,
+
+        domainAssociations: {},
       },
     }),
   )
@@ -166,6 +170,8 @@ test('should use hotkey', async () => {
         height: 200,
         isSetup: true,
         supportMessage: -1,
+
+        domainAssociations: {},
       },
     }),
   )
@@ -209,6 +215,8 @@ test('should use hotkey with alt', async () => {
         height: 200,
         isSetup: true,
         supportMessage: -1,
+
+        domainAssociations: {},
       },
     }),
   )
@@ -273,6 +281,8 @@ test('should order tiles', async () => {
         height: 200,
         isSetup: true,
         supportMessage: -1,
+
+        domainAssociations: {},
       },
     }),
   )

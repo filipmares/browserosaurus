@@ -25,6 +25,16 @@ const reorderedApp = prefs<{ sourceName: AppName; destinationName: AppName }>(
   'app/reordered',
 )
 
+const savedDomainAssociation = prefs<{ domain: string; appName: AppName }>(
+  'domain-association/saved',
+)
+const removedDomainAssociation = prefs<{ domain: string }>(
+  'domain-association/removed',
+)
+const updatedDomainAssociation = prefs<{ domain: string; appName: AppName }>(
+  'domain-association/updated',
+)
+
 const clickedHomepageButton = prefs('homepage-button/clicked')
 const clickedOpenIssueButton = prefs('open-issue-button/clicked')
 
@@ -37,7 +47,10 @@ export {
   clickedUpdateButton,
   clickedUpdateRestartButton,
   confirmedReset,
+  removedDomainAssociation,
   reorderedApp,
+  savedDomainAssociation,
   startedPrefs,
+  updatedDomainAssociation,
   updatedHotCode,
 }

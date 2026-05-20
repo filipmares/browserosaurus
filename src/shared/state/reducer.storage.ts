@@ -13,7 +13,10 @@ import {
 } from '../../renderers/picker/state/actions.js'
 import {
   confirmedReset,
+  removedDomainAssociation,
   reorderedApp,
+  savedDomainAssociation,
+  updatedDomainAssociation,
   updatedHotCode,
 } from '../../renderers/prefs/state/actions.js'
 
@@ -26,10 +29,12 @@ type Storage = {
   supportMessage: number
   isSetup: boolean
   height: number
+  domainAssociations: Record<string, AppName>
 }
 
 const defaultStorage: Storage = {
   apps: [],
+  domainAssociations: {},
   height: 200,
   isSetup: false,
   supportMessage: 0,
@@ -111,6 +116,27 @@ const storage = createReducer<Storage>(defaultStorage, (builder) =>
 
       const [removed] = state.apps.splice(sourceIndex, 1)
       state.apps.splice(destinationIndex, 0, removed)
+    })
+
+    .addCase(savedDomainAssociation, (state, action) => {
+      const { domain, appName } = action.payload
+      if (domain) {
+        state.domainAssociations[domain.toLowerCase()] = appName
+      }
+    })
+
+    .addCase(updatedDomainAssociation, (state, action) => {
+      const { domain, appName } = action.payload
+      if (domain) {
+        state.domainAssociations[domain.toLowerCase()] = appName
+      }
+    })
+
+    .addCase(removedDomainAssociation, (state, action) => {
+      const { domain } = action.payload
+      if (domain) {
+        delete state.domainAssociations[domain.toLowerCase()]
+      }
     }),
 )
 

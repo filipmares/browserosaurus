@@ -17,6 +17,7 @@ import {
   clickedDonate,
   clickedUpdateBar,
   startedPicker,
+  toggledSaveDomain,
 } from '../../renderers/picker/state/actions.js'
 import {
   clickedTabButton,
@@ -25,7 +26,7 @@ import {
 } from '../../renderers/prefs/state/actions.js'
 import { gotKeyLayoutMap } from '../../renderers/shared/state/actions.js'
 
-type PrefsTab = 'about' | 'apps' | 'general'
+type PrefsTab = 'about' | 'apps' | 'domains' | 'general'
 
 type Data = {
   version: string
@@ -39,6 +40,7 @@ type Data = {
   scanStatus: 'init' | 'scanned' | 'scanning'
   icons: Partial<Record<AppName, string>>
   activeAppIndex: number
+  saveDomainForUrl: boolean
 }
 
 const defaultData: Data = {
@@ -49,6 +51,7 @@ const defaultData: Data = {
   pickerStarted: false,
   prefsStarted: false,
   prefsTab: 'general',
+  saveDomainForUrl: false,
   scanStatus: 'init',
   updateStatus: 'no-update',
   url: '',
@@ -95,6 +98,11 @@ const data = createReducer<Data>(defaultData, (builder) =>
 
     .addCase(openedUrl, (state, action) => {
       state.url = action.payload
+      state.saveDomainForUrl = false
+    })
+
+    .addCase(toggledSaveDomain, (state, action) => {
+      state.saveDomainForUrl = action.payload
     })
 
     .addCase(clickedDonate, (state) => {
