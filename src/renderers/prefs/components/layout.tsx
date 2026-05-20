@@ -5,6 +5,7 @@ import { startedPrefs } from '../state/actions.js'
 import { HeaderBar } from './organisms/header-bar.js'
 import { AboutPane } from './organisms/pane-about.js'
 import { AppsPane } from './organisms/pane-apps.js'
+import { DomainsPane } from './organisms/pane-domains.js'
 import { GeneralPane } from './organisms/pane-general.js'
 
 const useAppStarted = () => {
@@ -26,6 +27,7 @@ const Layout = (): JSX.Element => {
       <div className="flex grow flex-col overflow-hidden p-8">
         <GeneralPane />
         <AppsPane />
+        <DomainsPane />
         <AboutPane />
       </div>
     </div>

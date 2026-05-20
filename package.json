@@ -37,7 +37,8 @@
     "website-css:watch": "npx tailwindcss -i node_modules/tailwindcss/tailwind.css -o ./docs/style.css --content docs/index.html -m --watch"
   },
   "dependencies": {
-    "file-icon": "^5.1.1"
+    "file-icon": "^5.1.1",
+    "tldts": "^7.0.30"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.5.0",
