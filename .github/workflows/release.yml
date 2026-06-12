@@ -23,9 +23,12 @@ jobs:
       - run: npm run typecheck
       - run: npm run test
       - name: Set release version
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           BASE=$(node -p "require('./package.json').version.split('.').slice(0, 2).join('.')")
-          VERSION="${BASE}.${{ github.run_number }}"
+          LATEST=$(gh release list --limit 200 --json tagName | jq -r --arg base "$BASE" '[ .[].tagName | select(startswith("v" + $base + ".")) | ltrimstr("v" + $base + ".") | select(test("^[0-9]+$")) | tonumber ] | max // -1')
+          VERSION="${BASE}.$((LATEST + 1))"
           npm version "$VERSION" --no-git-tag-version --allow-same-version
           echo "VERSION=$VERSION" >> "$GITHUB_ENV"
       - name: Build distributables
