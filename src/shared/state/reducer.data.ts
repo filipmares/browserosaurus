@@ -1,7 +1,6 @@
 import { createReducer } from '@reduxjs/toolkit'
 
 import type { AppName } from '../../config/apps.js'
-import { CARROT_URL } from '../../config/constants.js'
 import {
   availableUpdate,
   gotAppIcons,
@@ -12,7 +11,6 @@ import {
   startedScanning,
 } from '../../main/state/actions.js'
 import {
-  clickedDonate,
   clickedUpdateBar,
   startedPicker,
   toggledSaveDomain,
@@ -96,10 +94,6 @@ const data = createReducer<Data>(defaultData, (builder) =>
 
     .addCase(toggledSaveDomain, (state, action) => {
       state.saveDomainForUrl = action.payload
-    })
-
-    .addCase(clickedDonate, (state) => {
-      state.url = CARROT_URL
     })
 
     .addCase(clickedTabButton, (state, action) => {

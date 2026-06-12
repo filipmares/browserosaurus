@@ -36,12 +36,16 @@ const updatedDomainAssociation = prefs<{ domain: string; appName: AppName }>(
 
 const clickedHomepageButton = prefs('homepage-button/clicked')
 const clickedOpenIssueButton = prefs('open-issue-button/clicked')
+const clickedSupportButton = prefs('support-button/clicked')
+const clickedOpenUpstreamButton = prefs('open-upstream-button/clicked')
 
 export {
   clickedHomepageButton,
   clickedOpenIssueButton,
+  clickedOpenUpstreamButton,
   clickedRescanApps,
   clickedSetAsDefaultBrowserButton,
+  clickedSupportButton,
   clickedTabButton,
   clickedUpdateButton,
   confirmedReset,
