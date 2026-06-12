@@ -3,7 +3,7 @@
 import { app, shell } from 'electron'
 import deepEqual from 'fast-deep-equal'
 
-import { B_URL, ISSUES_URL } from '../../config/constants.js'
+import { B_URL, CARROT_URL, ISSUES_URL, UPSTREAM_URL } from '../../config/constants.js'
 import {
   clickedApp,
   clickedUpdateBar,
@@ -14,8 +14,10 @@ import {
 import {
   clickedHomepageButton,
   clickedOpenIssueButton,
+  clickedOpenUpstreamButton,
   clickedRescanApps,
   clickedSetAsDefaultBrowserButton,
+  clickedSupportButton,
   clickedUpdateButton,
   confirmedReset,
   savedDomainAssociation,
@@ -221,6 +223,16 @@ export const actionHubMiddleware =
     // Open issues page
     else if (clickedOpenIssueButton.match(action)) {
       shell.openExternal(ISSUES_URL)
+    }
+
+    // Open support page
+    else if (clickedSupportButton.match(action)) {
+      shell.openExternal(CARROT_URL)
+    }
+
+    // Open upstream project page
+    else if (clickedOpenUpstreamButton.match(action)) {
+      shell.openExternal(UPSTREAM_URL)
     }
 
     // Factory reset

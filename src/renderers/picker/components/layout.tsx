@@ -18,7 +18,6 @@ import AppLogo from './atoms/app-logo.js'
 import Kbd from './atoms/kbd.js'
 import { useKeyboardEvents } from './hooks/use-keyboard-events.js'
 import SaveDomainToggle from './organisms/save-domain-toggle.js'
-import SupportMessage from './organisms/support-message.js'
 import UpdateBar from './organisms/update-bar.js'
 import UrlBar from './organisms/url-bar.js'
 
@@ -142,8 +141,6 @@ const App: React.FC = () => {
       <UrlBar />
 
       <UpdateBar />
-
-      <SupportMessage />
     </div>
   )
 }

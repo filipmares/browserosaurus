@@ -26,13 +26,8 @@ const clickedUpdateBar = picker('update-bar/clicked')
 
 const toggledSaveDomain = picker<boolean>('save-domain/toggled')
 
-const clickedDonate = picker('donate/clicked')
-const clickedMaybeLater = picker('maybe-later/clicked')
-
 export {
   clickedApp,
-  clickedDonate,
-  clickedMaybeLater,
   clickedUpdateBar,
   clickedUrlBar,
   pressedKey,
