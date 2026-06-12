@@ -27,9 +27,7 @@ const gotDefaultBrowserStatus = main<boolean>('default-browser-status/got')
 
 const gotAppIcons = main<Partial<Record<AppName, string>>>('app-icons/got')
 
-const availableUpdate = main('update/available')
-const downloadingUpdate = main('update/downloading')
-const downloadedUpdate = main('update/downloaded')
+const availableUpdate = main<string>('update/available')
 
 const tray = actionNamespacer('tray')
 
@@ -41,8 +39,6 @@ export {
   changedPickerWindowBounds,
   clickedOpenPrefs,
   clickedRestorePicker,
-  downloadedUpdate,
-  downloadingUpdate,
   gotAppIcons,
   gotDefaultBrowserStatus,
   openedUrl,

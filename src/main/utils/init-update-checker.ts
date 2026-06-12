@@ -1,60 +1,45 @@
-import { app, autoUpdater } from 'electron'
+import { app } from 'electron'
 
-import package_ from '../../../package.json'
 import { logger } from '../../shared/utils/logger.js'
-import {
-  availableUpdate,
-  downloadedUpdate,
-  downloadingUpdate,
-} from '../state/actions.js'
+import { availableUpdate } from '../state/actions.js'
 import { dispatch } from '../state/store.js'
-import { pickerWindow, prefsWindow } from '../windows.js'
-import { getUpdateUrl } from './get-update-url.js'
-import { isUpdateAvailable } from './is-update-available.js'
+import { getLatestRelease } from './get-latest-release.js'
+
+const CURRENT_BUILD_NUMBER = Number(__APP_BUILD_NUMBER__)
+
+async function checkForUpdate(): Promise<void> {
+  const release = await getLatestRelease()
+
+  if (!release || release.buildNumber === undefined) {
+    return
+  }
+
+  if (release.buildNumber > CURRENT_BUILD_NUMBER) {
+    logger('AutoUpdater', `Update available: ${release.tag}`)
+    dispatch(availableUpdate(release.downloadUrl))
+  }
+}
 
 /**
- * Auto update check on production
+ * Auto update check on production.
+ *
+ * This fork's builds are unsigned, so Squirrel.Mac cannot apply updates
+ * in-app. Instead, poll the fork's GitHub releases and, when a newer build is
+ * found, surface a button that opens the release asset in the browser to
+ * download.
  */
 export async function initUpdateChecker(): Promise<void> {
-  if (app.isPackaged) {
-    autoUpdater.setFeedURL({
-      headers: {
-        'User-Agent': `${package_.name}/${package_.version} (darwin: ${process.arch})`,
-      },
-      url: getUpdateUrl(),
-    })
-
-    autoUpdater.on('before-quit-for-update', () => {
-      // All windows must be closed before an update can be applied using "restart".
-      pickerWindow?.destroy()
-      prefsWindow?.destroy()
-    })
-
-    autoUpdater.on('update-available', () => {
-      dispatch(downloadingUpdate())
-    })
-
-    autoUpdater.on('update-downloaded', () => {
-      dispatch(downloadedUpdate())
-    })
-
-    autoUpdater.on('error', () => {
-      logger('AutoUpdater', 'An error has occurred')
-    })
-
-    // Run on load
-    if (await isUpdateAvailable()) {
-      dispatch(availableUpdate())
-    }
-
-    // 1000 * 60 * 60 * 24
-    const ONE_DAY_MS = 86_400_000
-
-    // Check for updates every day.
-    setInterval(async () => {
-      if (await isUpdateAvailable()) {
-        dispatch(availableUpdate())
-      }
-    }, ONE_DAY_MS)
+  if (!app.isPackaged) {
+    return
   }
+
+  await checkForUpdate()
+
+  // 1000 * 60 * 60 * 24
+  const ONE_DAY_MS = 86_400_000
+
+  // Check for updates every day.
+  setInterval(async () => {
+    await checkForUpdate()
+  }, ONE_DAY_MS)
 }
