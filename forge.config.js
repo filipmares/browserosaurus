@@ -5,6 +5,38 @@ import { VitePlugin } from '@electron-forge/plugin-vite'
 
 /** @type {import('@electron-forge/shared-types').ForgeConfig} */
 const config = {
+  hooks: {
+    // In CI there is no Apple Developer certificate, so osxSign/osxNotarize
+    // below are disabled. Without re-signing, the packaged bundle keeps
+    // Electron's original ad-hoc signature, which macOS treats as broken once
+    // Forge renames the bundle and swaps in our Info.plist/icon. Downloaded
+    // builds then fail to launch as "damaged". Apply a fresh ad-hoc signature
+    // so the app runs once quarantine is cleared (still unsigned/un-notarized).
+    postPackage: async (_config, { platform, outputPaths }) => {
+      if (!process.env.CI || platform !== 'darwin') return
+      const { execFileSync } = await import('node:child_process')
+      const { readdirSync } = await import('node:fs')
+      const { join } = await import('node:path')
+      for (const outputPath of outputPaths) {
+        const appName = readdirSync(outputPath).find((entry) =>
+          entry.endsWith('.app'),
+        )
+        if (appName) {
+          const appPath = join(outputPath, appName)
+          execFileSync(
+            'codesign',
+            ['--force', '--deep', '--sign', '-', appPath],
+            { stdio: 'inherit' },
+          )
+          execFileSync(
+            'codesign',
+            ['--verify', '--deep', '--strict', appPath],
+            { stdio: 'inherit' },
+          )
+        }
+      }
+    },
+  },
   makers: [new MakerZIP({}, ['darwin'])],
   packagerConfig: {
     appBundleId: 'com.browserosaurus',
@@ -61,33 +93,6 @@ const config = {
       ],
     }),
   ],
-  hooks: {
-    // In CI there is no Apple Developer certificate, so osxSign/osxNotarize
-    // above are disabled. Without re-signing, the packaged bundle keeps
-    // Electron's original ad-hoc signature, which macOS treats as broken once
-    // Forge renames the bundle and swaps in our Info.plist/icon. Downloaded
-    // builds then fail to launch as "damaged". Apply a fresh ad-hoc signature
-    // so the app runs once quarantine is cleared (still unsigned/un-notarized).
-    postPackage: async (_config, { platform, outputPaths }) => {
-      if (!process.env.CI || platform !== 'darwin') return
-      const { execFileSync } = await import('node:child_process')
-      const { readdirSync } = await import('node:fs')
-      const { join } = await import('node:path')
-      for (const outputPath of outputPaths) {
-        const appName = readdirSync(outputPath).find((entry) =>
-          entry.endsWith('.app'),
-        )
-        if (!appName) continue
-        const appPath = join(outputPath, appName)
-        execFileSync('codesign', ['--force', '--deep', '--sign', '-', appPath], {
-          stdio: 'inherit',
-        })
-        execFileSync('codesign', ['--verify', '--deep', '--strict', appPath], {
-          stdio: 'inherit',
-        })
-      }
-    },
-  },
 }
 
 export default config
