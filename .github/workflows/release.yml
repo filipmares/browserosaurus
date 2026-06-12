@@ -32,7 +32,10 @@ jobs:
         run: |
           VERSION=$(node -p "require('./package.json').version")
           TAG="v${VERSION}-build.${{ github.run_number }}"
-          mapfile -t FILES < <(find out/make -type f -name '*.zip')
+          FILES=()
+          while IFS= read -r f; do
+            FILES+=("$f")
+          done < <(find out/make -type f -name '*.zip')
           if [ ${#FILES[@]} -eq 0 ]; then
             echo "No distributables found in out/make" >&2
             exit 1
