@@ -32,7 +32,7 @@ async function getInstalledAppNames(): Promise<void> {
   // It appears that sometimes the installed app IDs are not fetched, maybe a
   // race with Spotlight index? So if none found, keep retrying.
   // TODO is this needed any more, now using we're `find` method?
-  // https://github.com/will-stone/browserosaurus/issues/425
+  // Related historical discussion: issue #425.
   if (installedApps.length === 0) {
     await sleep(500)
     getInstalledAppNames()
