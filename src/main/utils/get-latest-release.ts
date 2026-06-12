@@ -16,18 +16,45 @@ type Release = {
 
 export type LatestRelease = {
   tag: string
-  buildNumber: number | undefined
   downloadUrl: string
 }
 
 /**
- * Release tags are formatted as `v{version}-build.{run_number}` by the release
- * workflow. The run number is globally monotonic, so it is used to determine
- * whether one build is newer than another.
+ * Extracts a `[major, minor, patch]` tuple from a version string or a
+ * `v`-prefixed release tag, ignoring anything around it.
  */
-export function parseBuildNumber(tag: string): number | undefined {
-  const match = /-build\.(\d+)/u.exec(tag)
-  return match ? Number(match[1]) : undefined
+export function parseVersion(
+  value: string,
+): [number, number, number] | undefined {
+  const match = /(\d+)\.(\d+)\.(\d+)/u.exec(value)
+  return match
+    ? [Number(match[1]), Number(match[2]), Number(match[3])]
+    : undefined
+}
+
+/**
+ * Returns true when `latest` is a newer semantic version than `current`.
+ */
+export function isNewerVersion(latest: string, current: string): boolean {
+  const latestParts = parseVersion(latest)
+  const currentParts = parseVersion(current)
+
+  if (!latestParts || !currentParts) {
+    return false
+  }
+
+  const [latestMajor, latestMinor, latestPatch] = latestParts
+  const [currentMajor, currentMinor, currentPatch] = currentParts
+
+  if (latestMajor !== currentMajor) {
+    return latestMajor > currentMajor
+  }
+
+  if (latestMinor !== currentMinor) {
+    return latestMinor > currentMinor
+  }
+
+  return latestPatch > currentPatch
 }
 
 /**
@@ -59,7 +86,6 @@ export async function getLatestRelease(): Promise<LatestRelease | undefined> {
     )
 
     return {
-      buildNumber: parseBuildNumber(data.tag_name),
       downloadUrl: pickDownloadUrl(data),
       tag: data.tag_name,
     }

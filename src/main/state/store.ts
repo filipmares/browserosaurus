@@ -15,14 +15,11 @@ import { busMiddleware } from './middleware.bus.js'
 
 const channel = Channel.MAIN
 
-const buildSuffix =
-  Number(__APP_BUILD_NUMBER__) > 0 ? ` (build ${__APP_BUILD_NUMBER__})` : ''
-
 const preloadedState: RootState = {
   data: {
     ...defaultData,
     isDefaultProtocolClient: app.isDefaultProtocolClient('http'),
-    version: `${app.getVersion()}${buildSuffix}${app.isPackaged ? '' : ' DEV'}`,
+    version: `${app.getVersion()}${app.isPackaged ? '' : ' DEV'}`,
   },
   storage: database.getAll(),
 }
