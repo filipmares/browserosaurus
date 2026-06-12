@@ -3,18 +3,16 @@ import { app } from 'electron'
 import { logger } from '../../shared/utils/logger.js'
 import { availableUpdate } from '../state/actions.js'
 import { dispatch } from '../state/store.js'
-import { getLatestRelease } from './get-latest-release.js'
-
-const CURRENT_BUILD_NUMBER = Number(__APP_BUILD_NUMBER__)
+import { getLatestRelease, isNewerVersion } from './get-latest-release.js'
 
 async function checkForUpdate(): Promise<void> {
   const release = await getLatestRelease()
 
-  if (!release || release.buildNumber === undefined) {
+  if (!release) {
     return
   }
 
-  if (release.buildNumber > CURRENT_BUILD_NUMBER) {
+  if (isNewerVersion(release.tag, app.getVersion())) {
     logger('AutoUpdater', `Update available: ${release.tag}`)
     dispatch(availableUpdate(release.downloadUrl))
   }
