@@ -1,7 +1,5 @@
-📣 This project is no longer maintained. Please see my
-[blog post](https://wstone.uk/blog/the-retirement-of-browserosaurus/) for the
-final thoughts on the project. Thank you everyone who has enjoyed using my
-little app 🤓
+📣 This fork is actively maintained. Browserosaurus was originally created by
+Will Stone.
 
 <img src="./docs/icon_squooshed.png" alt="logo" width="100" height="100" align="right" />
 
@@ -18,7 +16,7 @@ continue opening the link with.
 ## Installation
 
 Download Browserosaurus from the
-[GitHub releases page](https://github.com/will-stone/browserosaurus/releases/latest).
+[GitHub releases page](https://github.com/filipmares/browserosaurus/releases/latest).
 Select **x64** for Intel machines, or **arm64** for Apple Silicon (M1) machines.
 
 Or use [Homebrew](https://formulae.brew.sh/cask/browserosaurus#default). Thank
@@ -36,9 +34,9 @@ brew install --cask browserosaurus
 ## Help
 
 Found a bug? Please log an
-[issue](https://github.com/will-stone/browserosaurus/issues). For anything else,
+[issue](https://github.com/filipmares/browserosaurus/issues). For anything else,
 please see the documentation below or open a
-[discussion](https://github.com/will-stone/browserosaurus/discussions).
+[discussion](https://github.com/filipmares/browserosaurus/discussions).
 
 ## Projects inspired by Browserosaurus
 
@@ -58,8 +56,8 @@ forks of this project that you may like to consider:
 
 ## Documentation
 
-- [Changelog](https://github.com/will-stone/browserosaurus/releases)
-- [Help](https://github.com/will-stone/browserosaurus/discussions/categories/q-a)
+- [Changelog](https://github.com/filipmares/browserosaurus/releases)
+- [Help](https://github.com/filipmares/browserosaurus/discussions/categories/q-a)
 - [Supporting a new browser or app](guide/supporting-a-browser-or-app.md)
 - [Setting up for development](guide/setting-up-for-development.md)
 - [Privacy policy](guide/privacy.md)

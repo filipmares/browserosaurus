@@ -1,4 +1,4 @@
-const CARROT_URL = 'https://www.buymeacoffee.com/wstone'
+const CARROT_URL = 'https://github.com/filipmares/browserosaurus'
 const B_URL = 'https://github.com/filipmares/browserosaurus'
 const ISSUES_URL = 'https://github.com/filipmares/browserosaurus/issues'
 const UPSTREAM_URL = 'https://github.com/will-stone/browserosaurus'
