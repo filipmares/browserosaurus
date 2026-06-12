@@ -43,4 +43,5 @@ jobs:
           gh release create "$TAG" "${FILES[@]}" \
             --title "v${VERSION} (build ${{ github.run_number }})" \
             --target "$GITHUB_SHA" \
+            --notes-file .github/RELEASE_NOTES.md \
             --generate-notes
