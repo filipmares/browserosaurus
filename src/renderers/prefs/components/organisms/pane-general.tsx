@@ -6,7 +6,6 @@ import {
   clickedRescanApps,
   clickedSetAsDefaultBrowserButton,
   clickedUpdateButton,
-  clickedUpdateRestartButton,
   confirmedReset,
 } from '../../state/actions.js'
 import { Pane } from '../molecules/pane.js'
@@ -85,18 +84,18 @@ export const GeneralPane = (): JSX.Element => {
       <Row>
         <Left>Update:</Left>
         <Right>
-          {updateStatus === 'available' && (
-            <Button onClick={() => dispatch(clickedUpdateButton())}>
-              Download Update
-            </Button>
+          {updateStatus === 'available' ? (
+            <>
+              <Button onClick={() => dispatch(clickedUpdateButton())}>
+                Download Update
+              </Button>
+              <p className="mt-2 text-sm opacity-70">
+                Opens the latest release in your browser to download.
+              </p>
+            </>
+          ) : (
+            'No update available'
           )}
-          {updateStatus === 'downloading' && 'Downloading…'}
-          {updateStatus === 'downloaded' && (
-            <Button onClick={() => dispatch(clickedUpdateRestartButton())}>
-              Restart & Update
-            </Button>
-          )}
-          {updateStatus === 'no-update' && 'No update available'}
         </Right>
       </Row>
 

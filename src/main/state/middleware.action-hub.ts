@@ -1,6 +1,6 @@
 /* eslint-disable n/callback-return -- must flush middleware to get nextState */
 /* eslint-disable unicorn/prefer-regexp-test -- rtk uses .match */
-import { app, autoUpdater, shell } from 'electron'
+import { app, shell } from 'electron'
 import deepEqual from 'fast-deep-equal'
 
 import { B_URL, ISSUES_URL } from '../../config/constants.js'
@@ -17,7 +17,6 @@ import {
   clickedRescanApps,
   clickedSetAsDefaultBrowserButton,
   clickedUpdateButton,
-  clickedUpdateRestartButton,
   confirmedReset,
   savedDomainAssociation,
   startedPrefs,
@@ -118,15 +117,9 @@ export const actionHubMiddleware =
       app.setAsDefaultProtocolClient('https')
     }
 
-    // Update and restart
+    // Open the latest release in the browser to download
     else if (clickedUpdateButton.match(action)) {
-      autoUpdater.checkForUpdates()
-    }
-
-    // Update and restart
-    else if (clickedUpdateRestartButton.match(action)) {
-      autoUpdater.quitAndInstall()
-      // removeWindowsFromMemory()
+      shell.openExternal(nextState.data.updateUrl)
     }
 
     // Rescan for browsers

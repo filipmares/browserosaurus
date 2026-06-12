@@ -4,8 +4,6 @@ import type { AppName } from '../../config/apps.js'
 import { CARROT_URL } from '../../config/constants.js'
 import {
   availableUpdate,
-  downloadedUpdate,
-  downloadingUpdate,
   gotAppIcons,
   gotDefaultBrowserStatus,
   openedUrl,
@@ -30,7 +28,8 @@ type PrefsTab = 'about' | 'apps' | 'domains' | 'general'
 
 type Data = {
   version: string
-  updateStatus: 'available' | 'downloaded' | 'downloading' | 'no-update'
+  updateStatus: 'available' | 'no-update'
+  updateUrl: string
   isDefaultProtocolClient: boolean
   url: string
   pickerStarted: boolean
@@ -54,6 +53,7 @@ const defaultData: Data = {
   saveDomainForUrl: false,
   scanStatus: 'init',
   updateStatus: 'no-update',
+  updateUrl: '',
   url: '',
   version: '',
 }
@@ -84,16 +84,9 @@ const data = createReducer<Data>(defaultData, (builder) =>
       state.isDefaultProtocolClient = action.payload
     })
 
-    .addCase(availableUpdate, (state) => {
+    .addCase(availableUpdate, (state, action) => {
       state.updateStatus = 'available'
-    })
-
-    .addCase(downloadingUpdate, (state) => {
-      state.updateStatus = 'downloading'
-    })
-
-    .addCase(downloadedUpdate, (state) => {
-      state.updateStatus = 'downloaded'
+      state.updateUrl = action.payload
     })
 
     .addCase(openedUrl, (state, action) => {

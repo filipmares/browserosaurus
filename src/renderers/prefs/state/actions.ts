@@ -14,7 +14,6 @@ const clickedSetAsDefaultBrowserButton = prefs(
 
 const clickedRescanApps = prefs('rescan-apps/clicked')
 const clickedUpdateButton = prefs('update-button/clicked')
-const clickedUpdateRestartButton = prefs('update-restart-button/clicked')
 const confirmedReset = prefs('reset/confirmed')
 
 const updatedHotCode = prefs<{ appName: AppName; value: string }>(
@@ -45,7 +44,6 @@ export {
   clickedSetAsDefaultBrowserButton,
   clickedTabButton,
   clickedUpdateButton,
-  clickedUpdateRestartButton,
   confirmedReset,
   removedDomainAssociation,
   reorderedApp,
